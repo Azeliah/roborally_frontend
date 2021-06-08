@@ -20,3 +20,5 @@ const GamesComponent : FunctionComponent<GamesComponentProps> = () => {
             <div/>
     )
 }
+
+export default GamesComponent

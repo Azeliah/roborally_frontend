@@ -165,9 +165,10 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
                     setGames(games)
                 }).catch(() => {
                     console.error("Games could not be loaded")
-                })
+                });
             }
         }, 5000)
+
         return () => clearInterval(interval)
     }, [loaded, gameId])
 
