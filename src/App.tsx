@@ -1,5 +1,6 @@
 import React from 'react';
 import BoardComponent from "./components/BoardComponent";
+import GamesComponent from "./components/GamesComponent";
 import GameContextProvider from "./context/GameContextProvider";
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
             </header>
             {/*Context provider component below makes sure the context is accessible in any children components*/}
             <GameContextProvider>
+                <GamesComponent/>
                 <BoardComponent/>
             </GameContextProvider>
         </div>

@@ -4,6 +4,7 @@ import {Player} from "../types/Player";
 import {Board} from "../types/Board";
 import {Space} from "../types/Space";
 import GameApi from "../api/GameApi";
+import {Game} from "../types/Game";
 
 type GameContextProviderPropsType = {
     children: ReactNode
@@ -11,8 +12,9 @@ type GameContextProviderPropsType = {
 
 
 const GameContextProvider = ({children}: GameContextProviderPropsType) => {
+    const [games, setGames] = useState<Game[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
-    useEffect(() => {
+    /*useEffect(() => {
         GameApi.getBoard(1).then(board => {
             setSpaces(board.spaceDtos)
             setPlayers(board.playerDtos)
@@ -34,7 +36,7 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         }).catch(() => {
             console.error("Error while fetching board from backend")
         })
-    }, [])
+    }, []) */
     //The code below is executed when the provider is rendered (inside App.tsx)
     //The code should fetch the data from the API instead of using a static assignment
     //Define a useState variable, note that useState returns an array, containing that state itself aswell as
@@ -99,11 +101,83 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         })
     }, [currentPlayer, currentPlayerIndex, gameId, gameName, height, players, spaces, width])
 
+    const selectGame = useCallback(async (game: Game) => {
+        if (game.started){
+            GameApi.getBoard(game.id).then(board => {
+                if (board.playerDtos.length >0){
+                    setSpaces(board.spaceDtos)
+                    setPlayers(board.playerDtos)
+                    setWidth(board.width)
+                    setHeight(board.height)
+                    setGameId(board.boardId)
+                    setGameName(board.boardName)
+                    if (board.currentPlayerDto) {
+                        setCurrentPlayer(board.currentPlayerDto)
+                        board.playerDtos.forEach((player, index) => {
+                            if(player.playerId === board.currentPlayerDto?.playerId) {
+                                setCurrentPlayerIndex(index)
+                            }
+                        })
+                    }
+                    setLoaded(true) /*The board is now loaded*/
+                }
+            }).catch(() => {
+                console.error("Error while fetching board from backend")
+            })
+        } else {
+            console.error("Selected game " + game.name + " is not started yet!")
+        }
+    }, [])
+
+    const unselectedGame = useCallback(async () => {
+        setGameId(-1)
+        setLoaded(false)
+    }, [])
+
+    /*This will update the different windows to make the match within the interval stated as the last param */
+    useEffect( () => {
+        const interval = setInterval( async () =>{
+            if(loaded && gameId >= 0){
+                GameApi.getBoard(gameId).then(board => {
+                    if (gameId === board.boardId){
+                        setSpaces(board.spaceDtos)
+                        setPlayers(board.playerDtos)
+                        setWidth(board.width)
+                        setHeight(board.height)
+                        setGameId(board.boardId)
+                        setGameName(board.boardName)
+                        if (board.currentPlayerDto) {
+                            setCurrentPlayer(board.currentPlayerDto)
+                            board.playerDtos.forEach((player, index) => {
+                                if(player.playerId === board.currentPlayerDto?.playerId) {
+                                    setCurrentPlayerIndex(index)
+                                }
+                            })
+                        } else {
+                            console.log("Load outdated.")
+                        }
+                    }
+                }).catch(() =>{
+                    console.error("Board could not be loaded.")
+                })
+            } else{
+                GameApi.getGames().then(games => {
+                    setGames(games)
+                }).catch(() => {
+                    console.error("Games could not be loaded")
+                })
+            }
+        }, 5000)
+        return () => clearInterval(interval)
+    }, [loaded, gameId])
 
     return (
         <GameContext.Provider
             value={
                 {
+                    games: games,
+                    selectGame: selectGame,
+                    unselectedGame: unselectedGame,
                     loaded: loaded,
                     board: board,
                     setCurrentPlayerOnSpace: setPlayerOnSpace,
