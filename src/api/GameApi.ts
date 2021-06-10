@@ -30,6 +30,8 @@ class GameApi{
     public switchPlayer(boardId : number){
         return axios.put(`${this.BACKEND_URL}/board/${boardId}/switchplayer`)
     }
+
+
 }
 
 export default GameApi.getInstance()
