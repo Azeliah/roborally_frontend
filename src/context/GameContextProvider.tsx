@@ -101,6 +101,10 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         })
     }, [currentPlayer, currentPlayerIndex, gameId, gameName, height, players, spaces, width])
 
+    const createGame = useCallback(async (name: String) => {
+        await GameApi.createGame(name)
+    }, [])
+
     const selectGame = useCallback(async (game: Game) => {
         if (game.started){
             GameApi.getBoard(game.id).then(board => {
@@ -179,6 +183,7 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
                     games: games,
                     selectGame: selectGame,
                     unselectedGame: unselectedGame,
+                    createGame: createGame,
                     loaded: loaded,
                     board: board,
                     setCurrentPlayerOnSpace: setPlayerOnSpace,
