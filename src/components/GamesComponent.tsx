@@ -37,7 +37,7 @@ const GamesComponent : FunctionComponent<GamesComponentProps> = () => {
                         <input type="submit" value={"Save game"}/>
                     </form>
                     :
-                    console.log("Wup")
+                    console.log("created")
                 }
 
                 {games.map((game, index) =>

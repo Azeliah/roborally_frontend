@@ -14,18 +14,18 @@ see the space component for an example.
 type BoardComponentProps = {}
 const BoardComponent: FunctionComponent<BoardComponentProps> = () => {
     //{...} context is known as object destructuring
-    const {board, loaded, unselectedGame} = useContext(GameContext) //Hook form of Context.Consumer, used to access the context
+    const {board, loaded, unselectedGame, playedPlayer} = useContext(GameContext) //Hook form of Context.Consumer, used to access the context
 
     return (
         /*Apply css on div below*/
         loaded ?
         <div>
-            <Button variant="contained" color="default" startIcon={<ArrowBackIcon/>} onClick={unselectedGame}/>
+            <Button variant="contained" color="default" startIcon={<ArrowBackIcon/>} onClick={unselectedGame}/> <h1>{playedPlayer.playerName}</h1>
             <div className={styles.container}>
                 { board.spaceDtos.map((spaceArray, index) =>
                     <div key={"spaceArray" + index}>
                         {
-                            spaceArray.map((space, index) => <SpaceComponent key={"space" + index} space={space}/>)
+                            spaceArray.map((space, index) => <SpaceComponent key={"space" + index} space={space} currentPlayer={board.currentPlayerDto}/>)
                         }
                     </div>
                     )

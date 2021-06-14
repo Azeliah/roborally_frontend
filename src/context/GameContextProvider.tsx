@@ -5,6 +5,7 @@ import {Board} from "../types/Board";
 import {Space} from "../types/Space";
 import GameApi from "../api/GameApi";
 import {Game} from "../types/Game";
+import {User} from "../types/User";
 
 type GameContextProviderPropsType = {
     children: ReactNode
@@ -14,6 +15,7 @@ type GameContextProviderPropsType = {
 const GameContextProvider = ({children}: GameContextProviderPropsType) => {
     const [games, setGames] = useState<Game[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
+    const [playingPlayer, setPlayingPlayer] = useState<User>({playerId: -1, playerName:"", playerColor:"green"})
     /*useEffect(() => {
         GameApi.getBoard(1).then(board => {
             setSpaces(board.spaceDtos)
@@ -54,6 +56,7 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
 
     //Define a function used to set a player ona  specific space
     const setPlayerOnSpace = useCallback(async (space: Space) => {
+
         //Check if space already has a player standing on it
         if (!space.playerId) {
             await GameApi.moveCurrentPlayer(gameId, {...space, playerId: currentPlayer.playerId}).then(() => {
@@ -80,13 +83,13 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
     }, [currentPlayer, currentPlayerIndex, gameId, players, spaces])
 
     const switchToNextPlayer = useCallback(async () => {
-        await GameApi.switchPlayer(gameId).then(()=>{
-            const newPlayerIndex = (currentPlayerIndex + 1) % playerCount
-            console.log("old player index", currentPlayerIndex, "new player index", newPlayerIndex)
-            setCurrentPlayer(players[newPlayerIndex])
-            setCurrentPlayerIndex(newPlayerIndex)
-        }).catch(()=>console.error("Error while switching player"))
-        
+            await GameApi.switchPlayer(gameId).then(() => {
+                const newPlayerIndex = (currentPlayerIndex + 1) % playerCount
+                console.log("old player index", currentPlayerIndex, "new player index", newPlayerIndex)
+                setCurrentPlayer(players[newPlayerIndex])
+                setCurrentPlayerIndex(newPlayerIndex)
+            }).catch(() => console.error("Error while switching player"))
+
     }, [currentPlayerIndex, gameId, playerCount, players])
     const board = useMemo<Board>(() => {
         return ({
@@ -101,11 +104,19 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         })
     }, [currentPlayer, currentPlayerIndex, gameId, gameName, height, players, spaces, width])
 
+    const playedPlayer = useMemo<User>(() => {
+        return ({
+            playerId: playingPlayer.playerId,
+            playerName: playingPlayer.playerName,
+            playerColor: playingPlayer.playerColor
+        })
+    }, [playingPlayer.playerId, playingPlayer.playerName, playingPlayer.playerColor])
+
     const createGame = useCallback(async (name: String) => {
         await GameApi.createGame(name)
     }, [])
 
-    const selectGame = useCallback(async (game: Game) => {
+    const selectGame = useCallback(async (game: Game, playerId: number) => {
         if (game.started){
             GameApi.getBoard(game.id).then(board => {
                 if (board.playerDtos.length >0){
@@ -120,6 +131,9 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
                         board.playerDtos.forEach((player, index) => {
                             if(player.playerId === board.currentPlayerDto?.playerId) {
                                 setCurrentPlayerIndex(index)
+                            }
+                            if (player.playerId === playerId){
+                                setPlayingPlayer({playerId: player.playerId, playerName: player.playerName, playerColor: player.playerColor})
                             }
                         })
                     }
@@ -180,6 +194,7 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         <GameContext.Provider
             value={
                 {
+                    playedPlayer: playedPlayer,
                     games: games,
                     selectGame: selectGame,
                     unselectedGame: unselectedGame,
