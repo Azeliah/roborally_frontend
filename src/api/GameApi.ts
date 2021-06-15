@@ -34,6 +34,10 @@ class GameApi{
     public createGame(name: String){
         return axios.post<String>(`${this.BACKEND_URL}/game`, {gameId: -1, name: name}).then(value => console.log(value.data))
     }
+
+    public createBoard(name: String){
+        return axios.post<String>(`${this.BACKEND_URL}/board`, {boardId: -1, boardName: name, height : 6, width : 6}).then(value => console.log(value.data))
+    }
 }
 
 export default GameApi.getInstance()
