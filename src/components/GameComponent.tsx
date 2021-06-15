@@ -21,10 +21,9 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
 
     //game.users.forEach((user)=> {console.log(user)} )
     return (
-        !boardCreated ?
         <div>
             <div>
-                <b>{game.id} : {game.name} <button onClick={onClickGame}>Start Game</button></b>
+                <b>{game.id} : {game.name} {!boardCreated ? <button onClick={onClickGame}>Start Game</button> : ""}</b>
             </div>
 
             <ul>
@@ -32,15 +31,6 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
             </ul>
         </div>
 
-        :
-        <div>
-            <div>
-                <b>{game.id} : {game.name}</b>
-            </div>
-            <ul>
-                {game.users.map( (user, index) => <li key={index}> {user.playerName} </li>) }
-            </ul>
-        </div>
     )
 
 }
