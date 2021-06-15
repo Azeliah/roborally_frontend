@@ -9,6 +9,7 @@ export type GameContextType = {
     unselectedGame: () => Promise<void>,
     createGame: (name: String) => Promise<void>,
 
+
     loaded : boolean,
     board: Board,
     setCurrentPlayerOnSpace: (space: Space) => Promise<void>,
