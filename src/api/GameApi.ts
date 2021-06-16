@@ -34,6 +34,10 @@ class GameApi{
     public createGame(name: String){
         return axios.post<String>(`${this.BACKEND_URL}/game`, {gameId: -1, name: name}).then(value => console.log(value.data))
     }
+
+    public editGame (gameId : number){
+        return axios.put(`${this.BACKEND_URL}/game/${gameId}`)
+    }
 }
 
 export default GameApi.getInstance()

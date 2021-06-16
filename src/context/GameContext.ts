@@ -8,7 +8,7 @@ export type GameContextType = {
     selectGame: (game: Game) => Promise<void>,
     unselectedGame: () => Promise<void>,
     createGame: (name: String) => Promise<void>,
-
+    editGame: (game: Game) => Promise<void>,
 
     loaded : boolean,
     board: Board,
@@ -23,6 +23,7 @@ const GameContext = createContext<GameContextType>({
     selectGame : async () => {},
     unselectedGame : async () => {},
     createGame : async () => {},
+    editGame : async  () => {},
 
     loaded : false,
     board: {
