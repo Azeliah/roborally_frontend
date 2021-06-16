@@ -9,7 +9,7 @@ export type GameComponentProps = {
 }
 export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => {
 
-    const {games, selectGame, editGame, createBoard} = useContext(GameContext)
+    const {games, selectGame, editGame, createBoard, createUser} = useContext(GameContext)
     const [editGameClicked, setEditGameClicked] = useState(false)
     const [newName,setNewName] = useState("")
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {

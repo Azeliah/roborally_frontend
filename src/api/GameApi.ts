@@ -32,7 +32,7 @@ class GameApi{
     }
 
     public createGame(name: String){
-        return axios.post<String>(`${this.BACKEND_URL}/game`, {gameId: -1, name: name}).then(value => console.log(value.data))
+        return axios.post<String>(`${this.BACKEND_URL}/game`, {gameId: -1, name: name, width: 6, height: 6}).then(value => console.log(value.data))
     }
 
     public createBoard(game : Game){
