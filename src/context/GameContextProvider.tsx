@@ -106,7 +106,7 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
     }, [])
 
     const editGame = useCallback(async (game : Game) => {
-        await GameApi.editGame(gameId)
+        await GameApi.editGame(game, gameId)
     }, [gameId])
 
     const selectGame = useCallback(async (game: Game) => {

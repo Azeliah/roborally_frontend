@@ -32,7 +32,7 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
     return (
         <div>
             <div>
-                <b>{game.id} : {game.name} <button onClick={onClickGame}>Edit game</button></b>
+                <b>{game.id} : {game.name} <button onClick={onEditGame}>Edit game</button></b>
                 <b>{game.id} : {game.name} <button onClick={onClickGame}>Play game</button></b>
             </div>
             <div>
@@ -49,11 +49,6 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
                     :
                     console.log("Done")
                 }
-
-                    {games.map((game, index) =>
-                        <GameComponent key={"game" + index} game={game}/>
-                        )
-                    }
             </div>
             <ul>
                 {game.users.map( (user, index) => <li key={index}> {user.playerName} </li>) }
