@@ -42,6 +42,10 @@ class GameApi{
     public createUser(gameId : number){
         return axios.post<String>(`${this.BACKEND_URL}/game/${gameId}/user`)
     }
+
+    public editGame (gameId : number){
+        return axios.put(`${this.BACKEND_URL}/game/${gameId}`)
+    }
 }
 
 export default GameApi.getInstance()

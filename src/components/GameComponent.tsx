@@ -9,7 +9,12 @@ export type GameComponentProps = {
 }
 export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => {
 
-    const {selectGame, createBoard, createUser} = useContext(GameContext)
+    const {games, selectGame, editGame, createBoard} = useContext(GameContext)
+    const [editGameClicked, setEditGameClicked] = useState(false)
+    const [newName,setNewName] = useState("")
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewName(event.target.value)}
+
 
     const onClickGame = async () => {
         selectGame(game)
@@ -23,7 +28,16 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
 
     const [boardCreated, setBoardCreated] = useState(false)
 
-    //game.users.forEach((user)=> {console.log(user)} )
+    const onEditClicked = (event: React.FormEvent<HTMLFormElement>) =>{
+        editGame(game).then(t=>{})
+        setEditGameClicked(false)
+    }
+
+    const onEditGame = () => {
+        setEditGameClicked(true)
+        console.log("Going to edit game mode")
+    }
+
     return (
         <div>
             <div>
@@ -31,12 +45,30 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
                     {!boardCreated ? <button onClick={onClickGame}>Start Game</button> : ""}
                 </b>
             </div>
+            <div>
+                <button onClick={onEditGame}> Edit game </button>
+                {editGameClicked ?
+                    <form onSubmit={onEditClicked}>
+                        <label> Edit the name of the game </label>
+                        <input
+                            type = "text"
+                            value={newName}
+                            onChange = {onChange}/>
+                        <input type="submit" value={"Save new name"}/>
+                    </form>
+                    :
+                    console.log("Done")
+                }
 
+                    {games.map((game, index) =>
+                        <GameComponent key={"game" + index} game={game}/>
+                        )
+                    }
+            </div>
             <ul>
                 {game.users.map( (user, index) => <li key={index}> {user.playerName} </li>) }
             </ul>
         </div>
-
     )
 
 }
