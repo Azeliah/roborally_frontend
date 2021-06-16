@@ -35,8 +35,12 @@ class GameApi{
         return axios.post<String>(`${this.BACKEND_URL}/game`, {gameId: -1, name: name}).then(value => console.log(value.data))
     }
 
-    public createBoard(name: String){
-        return axios.post<String>(`${this.BACKEND_URL}/board`, {boardId: -1, boardName: name, height : 6, width : 6}).then(value => console.log(value.data))
+    public createBoard(game : Game){
+        return axios.post<String>(`${this.BACKEND_URL}/board`, [{boardId: -1, boardName: game.name, height : 6, width : 6}, {game : game}]).then(value => console.log(value.data))
+    }
+
+    public createUser(gameId : number){
+        return axios.post<String>(`${this.BACKEND_URL}/game/${gameId}/user`)
     }
 }
 

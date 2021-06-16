@@ -9,16 +9,16 @@ export type GameComponentProps = {
 }
 export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => {
 
-    const {selectGame, createBoard} = useContext(GameContext)
+    const {selectGame, createBoard, createUser} = useContext(GameContext)
 
     const onClickGame = async () => {
         selectGame(game)
-        createBoard(game.name).then(r => {})
+        createBoard(game).then(r => {})
         setBoardCreated(true)
     }
 
     const addUserToGame = async () => {
-
+        createUser(game.id)
     }
 
     const [boardCreated, setBoardCreated] = useState(false)
@@ -27,7 +27,7 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
     return (
         <div>
             <div>
-                <b>{game.id} : {game.name} <button onClick={addUserToGame}>Add user</button>
+                <b>{game.id} : {game.name} {!boardCreated ? <button onClick={addUserToGame}>Add user</button>: ""}
                     {!boardCreated ? <button onClick={onClickGame}>Start Game</button> : ""}
                 </b>
             </div>
