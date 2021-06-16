@@ -5,6 +5,7 @@ import {Board} from "../types/Board";
 import {Space} from "../types/Space";
 import GameApi from "../api/GameApi";
 import {Game} from "../types/Game";
+import {User} from "../types/User";
 
 type GameContextProviderPropsType = {
     children: ReactNode
@@ -138,6 +139,10 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         setLoaded(false)
     }, [])
 
+    const updateUser = useCallback(async (user: User) => {
+        await GameApi.updateUser(user);
+    },[])
+
     /*This will update the different windows to make the match within the interval stated as the last param */
     useEffect( () => {
         const interval = setInterval( async () =>{
@@ -180,6 +185,7 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         <GameContext.Provider
             value={
                 {
+                    updateUser: updateUser,
                     games: games,
                     selectGame: selectGame,
                     unselectedGame: unselectedGame,
