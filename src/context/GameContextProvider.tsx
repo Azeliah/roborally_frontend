@@ -56,7 +56,6 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
 
     //Define a function used to set a player ona  specific space
     const setPlayerOnSpace = useCallback(async (space: Space) => {
-
         //Check if space already has a player standing on it
         if (!space.playerId) {
             await GameApi.moveCurrentPlayer(gameId, {...space, playerId: currentPlayer.playerId}).then(() => {
@@ -83,7 +82,8 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
     }, [currentPlayer, currentPlayerIndex, gameId, players, spaces])
 
     const switchToNextPlayer = useCallback(async () => {
-            await GameApi.switchPlayer(gameId).then(() => {
+
+            await GameApi.switchPlayer(gameId, currentPlayerIndex+1).then(() => {
                 const newPlayerIndex = (currentPlayerIndex + 1) % playerCount
                 console.log("old player index", currentPlayerIndex, "new player index", newPlayerIndex)
                 setCurrentPlayer(players[newPlayerIndex])
@@ -116,7 +116,7 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         await GameApi.createGame(name)
     }, [])
 
-    const selectGame = useCallback(async (game: Game, playerId: number) => {
+    const selectGame = useCallback(async (game: Game) => {
         if (game.started){
             GameApi.getBoard(game.id).then(board => {
                 if (board.playerDtos.length >0){
@@ -131,9 +131,6 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
                         board.playerDtos.forEach((player, index) => {
                             if(player.playerId === board.currentPlayerDto?.playerId) {
                                 setCurrentPlayerIndex(index)
-                            }
-                            if (player.playerId === playerId){
-                                setPlayingPlayer({playerId: player.playerId, playerName: player.playerName, playerColor: player.playerColor})
                             }
                         })
                     }
