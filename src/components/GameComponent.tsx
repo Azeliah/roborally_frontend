@@ -59,11 +59,6 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
                     :
                     console.log("Done")
                 }
-
-                    {games.map((game, index) =>
-                        <GameComponent key={"game" + index} game={game}/>
-                        )
-                    }
             </div>
             <ul>
                 {game.users.map( (user, index) => <li key={index}> {user.playerName} </li>) }
