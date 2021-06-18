@@ -37,11 +37,11 @@ class GameApi {
         return axios.post<String>(`${this.BACKEND_URL}/game`, {
             gameId: -1,
             name: name
-        }).then(value => console.log(value.data))
+        })
     }
 
     public createBoard(game : Game){
-        return axios.post<String>(`${this.BACKEND_URL}/board`, {gameId: game.id, name: game.name, height : 6, width : 6, users: game.users}).then(value => console.log(value.data))
+        return axios.post<String>(`${this.BACKEND_URL}/board`, {gameId: game.id, name: game.name, height : 6, width : 6, users: game.users})
     }
 
     public createUser(gameId : number){

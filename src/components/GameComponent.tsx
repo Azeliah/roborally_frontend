@@ -8,9 +8,10 @@ export type GameComponentProps = {
 }
 export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => {
 
+    const MAX_NO_USERS = 4;
     const {games, selectGame, editGame, createBoard, createUser} = useContext(GameContext)
     const [editGameClicked, setEditGameClicked] = useState(false)
-    const [newName,setNewName] = useState("")
+    const [newName,setNewName] = useState(game.name)
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewName(event.target.value)}
 
@@ -34,29 +35,27 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
 
     const onEditGame = () => {
         setEditGameClicked(true)
-        console.log("Going to edit game mode")
     }
 
     return (
         <div>
             <div>
-                <b>{game.id} : {game.name} {!boardCreated ? <button onClick={addUserToGame}>Add user</button>: ""}
+                <b>
+                    {game.id} : {game.name} {(!boardCreated && game.users.length < MAX_NO_USERS) ? <button onClick={addUserToGame}>Add user</button>: ""}
                     {!boardCreated ? <button onClick={onClickGame}>Start Game</button> : ""}
                 </b>
             </div>
             <div>
-                <button onClick={onEditGame}> Edit game </button>
                 {editGameClicked ?
                     <form onSubmit={onEditClicked}>
-                        <label> Edit the name of the game </label>
                         <input
                             type = "text"
                             value={newName}
                             onChange = {onChange}/>
-                        <input type="submit" value={"Save new name"}/>
+                        <input type="submit" value={"Apply changes"}/>
                     </form>
                     :
-                    console.log("Done")
+                    <button onClick={onEditGame}> Edit game </button>
                 }
             </div>
             <ul>
