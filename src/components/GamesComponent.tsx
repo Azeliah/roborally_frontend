@@ -23,6 +23,7 @@ const GamesComponent : FunctionComponent<GamesComponentProps> = () => {
         setCreateGameClicked(true)
         console.log("Going to create game mode")
     }
+
     return (
         !loaded ?
             <div>
@@ -34,6 +35,7 @@ const GamesComponent : FunctionComponent<GamesComponentProps> = () => {
                         <input
                             type="text"
                             value={name}
+                            required
                             onChange={onChange}/>
                         <input type="submit" value={"Save game"}/>
                     </form>
