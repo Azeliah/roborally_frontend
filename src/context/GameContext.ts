@@ -6,7 +6,7 @@ import {User} from "../types/User";
 
 export type GameContextType = {
     games: Game[],
-    selectGame: (game: Game) => Promise<void>,
+    selectGame: (game: Game, playerId: number) => Promise<void>,
     unselectedGame: () => Promise<void>,
     createGame: (name: String) => Promise<void>,
 

@@ -12,8 +12,8 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
 
     const {selectGame, board} = useContext(GameContext)
 
-    const onClickGame = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        selectGame(game)
+    const onClickGame = async (e: React.MouseEvent<HTMLButtonElement>, playerId: number) => {
+        selectGame(game, playerId)
     }
 
     return (
@@ -24,7 +24,7 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
 
             <ul>
                 {game.users.map( (user, index) =>
-                <li key={index}> {user.playerName} <button value={user.playerId} onClick={e => onClickGame(e)}>Play</button>
+                <li key={index}> {user.playerName} <button value={user.playerId} onClick={e => onClickGame(e, user.playerId)}>Play</button>
 
 
                 </li> ) }

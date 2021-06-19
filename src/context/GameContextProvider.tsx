@@ -116,7 +116,7 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         await GameApi.createGame(name)
     }, [])
 
-    const selectGame = useCallback(async (game: Game) => {
+    const selectGame = useCallback(async (game: Game, playerId: number) => {
         if (game.started){
             GameApi.getBoard(game.id).then(board => {
                 if (board.playerDtos.length >0){
@@ -131,6 +131,9 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
                         board.playerDtos.forEach((player, index) => {
                             if(player.playerId === board.currentPlayerDto?.playerId) {
                                 setCurrentPlayerIndex(index)
+                            }
+                            if(player.playerId === playerId){
+                                setPlayingPlayer(player)
                             }
                         })
                     }
