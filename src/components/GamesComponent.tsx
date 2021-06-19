@@ -26,6 +26,7 @@ const GamesComponent : FunctionComponent<GamesComponentProps> = () => {
     return (
         !loaded ?
             <div>
+                <h1>Welcome to Roborally</h1>
                 <button onClick={onCreateGame}>Create game</button>
                 { createGameClicked ?
                     <form onSubmit={onSubmit}>

@@ -20,7 +20,16 @@ const BoardComponent: FunctionComponent<BoardComponentProps> = () => {
         /*Apply css on div below*/
         loaded ?
         <div>
-            <Button variant="contained" color="default" startIcon={<ArrowBackIcon/>} onClick={unselectedGame}/> <h1>{playedPlayer.playerName}</h1>
+
+            <div >
+                <Button  variant="contained" color="default" startIcon={<ArrowBackIcon/>} onClick={unselectedGame}/>
+                <div className={styles.playerDescriptionContainer}>
+                    <br/>
+                    <h1 className={styles.inlineDisplay}>{playedPlayer.playerName} </h1>
+                    <div className={styles[playedPlayer.playerColor + "Box"]}/>
+                    <br/>
+                </div>
+            </div>
             <div className={styles.container}>
                 { board.spaceDtos.map((spaceArray, index) =>
                     <div key={"spaceArray" + index}>

@@ -19,6 +19,7 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
     return (
         <div>
             <div>
+                <br/>
                 <b>{game.id} : {game.name} </b>
             </div>
 
