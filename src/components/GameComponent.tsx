@@ -11,9 +11,28 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
 
     const {games, selectGame, editGame} = useContext(GameContext)
     const [editGameClicked, setEditGameClicked] = useState(false)
-    const [newName,setNewName] = useState("")
-    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewName(event.target.value)}
+    const [newName,setNewName] = useState("Game name")
+    const [newHeight,setNewHeight] = useState("Game height")
+    const [newWidth,setNewWidth] = useState("Game Width")
+    const [checkHValid, setCheckHValid] = useState(false)
+
+    const onChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewName(event.target.value)
+    }
+
+    const onChangeHeight = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.target.validity.valid ?
+          setCheckHValid(true):
+            console.log("This is not a number")
+        setNewHeight(event.target.value)
+    }
+
+    const onChangeWidth = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.target.validity.valid ?
+            setCheckHValid(true):
+            console.log("This is not a number")
+        setNewWidth(event.target.value)
+    }
 
     const onClickGame = async () => {
         selectGame(game)
@@ -32,10 +51,7 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
     return (
         <div>
             <div>
-                <b>{game.id} : {game.name} <button onClick={onEditGame}>Edit game</button></b>
-                <b>{game.id} : {game.name} <button onClick={onClickGame}>Play game</button></b>
-            </div>
-            <div>
+                <b>{game.id} : {game.name}<button onClick={onClickGame}>Play game</button></b>
                 <button onClick={onEditGame}> Edit game </button>
                 {editGameClicked ?
                     <form onSubmit={onEditClicked}>
@@ -43,7 +59,17 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
                         <input
                             type = "text"
                             value={newName}
-                            onChange = {onChange}/>
+                            onChange = {onChangeName}/><br/>
+                        <input
+                            type = "text"
+                            pattern="[0-9]*"
+                            value={newWidth}
+                            onChange = {onChangeWidth}/><br/>
+                        <input
+                            type = "text"
+                            pattern="[0-9]*"
+                            value={newHeight}
+                            onChange = {onChangeHeight}/><br/>
                         <input type="submit" value={"Save new name"}/>
                     </form>
                     :
@@ -55,5 +81,4 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
             </ul>
         </div>
     )
-
 }
