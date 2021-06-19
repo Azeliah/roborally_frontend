@@ -20,13 +20,14 @@ const BoardComponent: FunctionComponent<BoardComponentProps> = () => {
         /*Apply css on div below*/
         loaded ?
         <div>
-
             <div >
                 <Button  variant="contained" color="default" startIcon={<ArrowBackIcon/>} onClick={unselectedGame}/>
                 <div className={styles.playerDescriptionContainer}>
                     <br/>
-                    <h1 className={styles.inlineDisplay}>{playedPlayer.playerName} </h1>
+                    <h1 className={styles.inlineDisplay}>{playedPlayer.playerName}</h1>
                     <div className={styles[playedPlayer.playerColor + "Box"]}/>
+                    <b>Robot {board.currentPlayerDto?.playerName}s turn</b>
+                    <div className={styles[board.currentPlayerDto?.playerColor + "Box"]}/>
                     <br/>
                 </div>
             </div>

@@ -1,7 +1,8 @@
 import React, {FunctionComponent, useContext, useState} from 'react';
 import {Game} from "../types/Game";
 import GameContext from "../context/GameContext";
-import {User} from "../types/User";
+import styles from "../styling/GamesComponent.module.scss" //Import css module
+
 
 
 
@@ -25,7 +26,7 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
 
             <ul>
                 {game.users.map( (user, index) =>
-                <li key={index}> {user.playerName} <button value={user.playerId} onClick={e => onClickGame(e, user.playerId)}>Play</button>
+                <li key={index}> {user.playerName} <button className={styles.buttonStyled} value={user.playerId} onClick={e => onClickGame(e, user.playerId)}>Play</button>
 
 
                 </li> ) }
