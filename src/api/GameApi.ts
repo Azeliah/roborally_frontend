@@ -38,13 +38,6 @@ class GameApi{
     public editGame (game: Game, gameId : number){
         return axios.put(`${this.BACKEND_URL}/game/${gameId}`, game)
     }
-
-    /*
-    public editGame(game: Game){
-        return axios.put(`${this.BACKEND_URL}/game`).then(value => value.data)
-    }
-
-     */
 }
 
 export default GameApi.getInstance()

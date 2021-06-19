@@ -9,7 +9,7 @@ export type GameComponentProps = {
 }
 export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => {
 
-    const {games, selectGame, editGame} = useContext(GameContext)
+    const {selectGame, editGame} = useContext(GameContext)
     const [editGameClicked, setEditGameClicked] = useState(false)
     const [newName,setNewName] = useState("Game name")
     const [newHeight,setNewHeight] = useState("Game height")
@@ -39,6 +39,12 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
     }
 
     const onEditClicked = (event: React.FormEvent<HTMLFormElement>) =>{
+        game.name = newName
+        if (checkHValid){
+            game.height = parseInt(newHeight)
+            game.width = parseInt(newWidth)
+        }
+
         editGame(game).then(t=>{})
         setEditGameClicked(false)
     }
@@ -55,7 +61,7 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
                 <button onClick={onEditGame}> Edit game </button>
                 {editGameClicked ?
                     <form onSubmit={onEditClicked}>
-                        <label> Edit the name of the game </label>
+                        <label> Edit the name of the game </label><br/>
                         <input
                             type = "text"
                             value={newName}
