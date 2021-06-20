@@ -161,7 +161,6 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         await GameApi.updateUser(user);
     }, [])
 
-    /*This will update the different windows to make the match within the interval stated as the last param */
     useEffect(() => {
         const interval = setInterval(async () => {
             if (loaded && gameId >= 0) {

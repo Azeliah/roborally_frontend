@@ -9,24 +9,25 @@ export type GameComponentProps = {
 export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => {
 
     const MAX_NO_USERS = 4;
+    const [boardCreated, setBoardCreated] = useState(false)
     const {games, selectGame, editGame, createBoard, createUser} = useContext(GameContext)
     const [editGameClicked, setEditGameClicked] = useState(false)
     const [newName,setNewName] = useState(game.name)
+
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewName(event.target.value)}
-
 
     const onClickGame = async () => {
         selectGame(game)
         createBoard(game).then(r => {})
         setBoardCreated(true)
+
     }
 
     const addUserToGame = async () => {
         createUser(game.id)
-    }
 
-    const [boardCreated, setBoardCreated] = useState(false)
+    }
 
     const onEditClicked = (event: React.FormEvent<HTMLFormElement>) =>{
         editGame(game).then(t=>{})
@@ -42,7 +43,7 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
             <div>
                 <b>
                     {game.id} : {game.name} {(!boardCreated && game.users.length < MAX_NO_USERS) ? <button onClick={addUserToGame}>Add user</button>: ""}
-                    {!boardCreated ? <button onClick={onClickGame}>Start Game</button> : ""}
+                    {!boardCreated && game.users.length > 0 ? <button onClick={onClickGame}>Start Game</button> : ""}
                 </b>
             </div>
             <div>
