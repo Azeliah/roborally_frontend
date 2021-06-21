@@ -5,4 +5,6 @@ export type Game = {
     name : string,
     started : boolean
     users : User[]
+    width : number
+    height : number
 }
