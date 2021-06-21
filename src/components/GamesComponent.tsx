@@ -16,17 +16,16 @@ const GamesComponent : FunctionComponent<GamesComponentProps> = () => {
 
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) =>{
         createGame(name).then(r => {})
+        setName("")
         setCreateGameClicked(false)
     }
 
     const onCreateGame = () => {
         setCreateGameClicked(true)
-        console.log("Going to create game mode")
     }
     return (
         !loaded ?
             <div>
-                <button onClick={onCreateGame}>Create game</button>
                 { createGameClicked ?
                     <form onSubmit={onSubmit}>
                         <label>Name of the game</label>
@@ -37,7 +36,7 @@ const GamesComponent : FunctionComponent<GamesComponentProps> = () => {
                         <input type="submit" value={"Save game"}/>
                     </form>
                     :
-                    console.log("Wup")
+                    <button onClick={onCreateGame}>Create game</button>
                 }
 
                 {games.map((game, index) =>

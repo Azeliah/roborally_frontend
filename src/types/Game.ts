@@ -7,4 +7,6 @@ export type Game = {
     height : number,
     width : number
     users : User[]
+    width : number
+    height : number
 }

@@ -1,21 +1,26 @@
 import React, {FunctionComponent, useContext, useState} from 'react';
 import {Game} from "../types/Game";
 import GameContext from "../context/GameContext";
-
-
+import {UserComponent} from "./UserComponent";
 
 export type GameComponentProps = {
     game: Game
 }
 export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => {
 
-    const {selectGame, editGame} = useContext(GameContext)
+    const MAX_NO_USERS = 4;
+    const [boardCreated, setBoardCreated] = useState(false)
+    const {games, selectGame, editGame, createBoard, createUser} = useContext(GameContext)
     const [editGameClicked, setEditGameClicked] = useState(false)
-    const [newName,setNewName] = useState("Game name")
+    const [newName,setNewName] = useState(game.name)
     const [newHeight,setNewHeight] = useState("Game height")
     const [newWidth,setNewWidth] = useState("Game Width")
     const [checkHValid, setCheckHValid] = useState(false)
 
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewName(event.target.value)
+    }
+    
     const onChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewName(event.target.value)
     }
@@ -36,6 +41,14 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
 
     const onClickGame = async () => {
         selectGame(game)
+        createBoard(game).then(r => {})
+        setBoardCreated(true)
+
+    }
+
+    const addUserToGame = async () => {
+        createUser(game.id)
+
     }
 
     const onEditClicked = (event: React.FormEvent<HTMLFormElement>) =>{
@@ -51,14 +64,11 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
 
     const onEditGame = () => {
         setEditGameClicked(true)
-        console.log("Going to edit game mode")
     }
 
     return (
         <div>
             <div>
-                <b>{game.id} : {game.name}<button onClick={onClickGame}>Play game</button></b>
-                <button onClick={onEditGame}> Edit game </button>
                 {editGameClicked ?
                     <form onSubmit={onEditClicked}>
                         <label> Edit the name of the game </label><br/>
@@ -77,13 +87,17 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
                             value={newHeight}
                             onChange = {onChangeHeight}/><br/>
                         <input type="submit" value={"Save new name"}/>
-                    </form>
                     :
-                    console.log("Done")
-                }
+                    <button onClick={onEditGame}> Edit game </button>
+            </div>
+            <div>
+                <b>
+                    {game.id} : {game.name} {(!boardCreated && game.users.length < MAX_NO_USERS) ? <button onClick={addUserToGame}>Add user</button>: ""}
+                    {!boardCreated && game.users.length > 0 ? <button onClick={onClickGame}>Start Game</button> : ""}
+                </b>
             </div>
             <ul>
-                {game.users.map( (user, index) => <li key={index}> {user.playerName} </li>) }
+                {game.users.map((user, index) => <UserComponent user={user} key={index}/>)}
             </ul>
         </div>
     )
