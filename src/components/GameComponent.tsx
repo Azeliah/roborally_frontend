@@ -13,9 +13,31 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
     const {games, selectGame, editGame, createBoard, createUser} = useContext(GameContext)
     const [editGameClicked, setEditGameClicked] = useState(false)
     const [newName,setNewName] = useState(game.name)
+    const [newHeight,setNewHeight] = useState("Game height")
+    const [newWidth,setNewWidth] = useState("Game Width")
+    const [checkHValid, setCheckHValid] = useState(false)
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewName(event.target.value)}
+        setNewName(event.target.value)
+    }
+    
+    const onChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewName(event.target.value)
+    }
+
+    const onChangeHeight = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.target.validity.valid ?
+          setCheckHValid(true):
+            console.log("This is not a number")
+        setNewHeight(event.target.value)
+    }
+
+    const onChangeWidth = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.target.validity.valid ?
+            setCheckHValid(true):
+            console.log("This is not a number")
+        setNewWidth(event.target.value)
+    }
 
     const onClickGame = async () => {
         selectGame(game)
@@ -30,6 +52,12 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
     }
 
     const onEditClicked = (event: React.FormEvent<HTMLFormElement>) =>{
+        game.name = newName
+        if (checkHValid){
+            game.height = parseInt(newHeight)
+            game.width = parseInt(newWidth)
+        }
+
         editGame(game).then(t=>{})
         setEditGameClicked(false)
     }
@@ -41,28 +69,36 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
     return (
         <div>
             <div>
+                {editGameClicked ?
+                    <form onSubmit={onEditClicked}>
+                        <label> Edit the name of the game </label><br/>
+                        <input
+                            type = "text"
+                            value={newName}
+                            onChange = {onChangeName}/><br/>
+                        <input
+                            type = "text"
+                            pattern="[0-9]*"
+                            value={newWidth}
+                            onChange = {onChangeWidth}/><br/>
+                        <input
+                            type = "text"
+                            pattern="[0-9]*"
+                            value={newHeight}
+                            onChange = {onChangeHeight}/><br/>
+                        <input type="submit" value={"Save new name"}/>
+                    :
+                    <button onClick={onEditGame}> Edit game </button>
+            </div>
+            <div>
                 <b>
                     {game.id} : {game.name} {(!boardCreated && game.users.length < MAX_NO_USERS) ? <button onClick={addUserToGame}>Add user</button>: ""}
                     {!boardCreated && game.users.length > 0 ? <button onClick={onClickGame}>Start Game</button> : ""}
                 </b>
-            </div>
-            <div>
-                {editGameClicked ?
-                    <form onSubmit={onEditClicked}>
-                        <input
-                            type = "text"
-                            value={newName}
-                            onChange = {onChange}/>
-                        <input type="submit" value={"Apply changes"}/>
-                    </form>
-                    :
-                    <button onClick={onEditGame}> Edit game </button>
-                }
             </div>
             <ul>
                 {game.users.map((user, index) => <UserComponent user={user} key={index}/>)}
             </ul>
         </div>
     )
-
 }

@@ -110,6 +110,11 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         await GameApi.createGame(name)
     }, [])
 
+
+    const editGame = useCallback(async (game : Game) => {
+        await GameApi.editGame(game, gameId)
+    }, [])
+
     const createBoard = useCallback(async (game: Game) => {
         await GameApi.createBoard(game)
     }, [])
@@ -119,10 +124,6 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
             console.error("User could not be created")
         })
     }, [])
-
-    const editGame = useCallback(async (game: Game) => {
-        await GameApi.editGame(gameId)
-    }, [gameId])
 
     const selectGame = useCallback(async (game: Game) => {
         if (game.started) {

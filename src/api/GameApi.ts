@@ -48,8 +48,8 @@ class GameApi {
         return axios.post<String>(`${this.BACKEND_URL}/game/${gameId}/user`)
     }
 
-    public editGame (gameId : number){
-        return axios.put(`${this.BACKEND_URL}/game/${gameId}`)
+    public editGame (game: Game, gameId : number){
+        return axios.put(`${this.BACKEND_URL}/game/${gameId}`, game)
     }
 
     public updateUser(user: User) {
