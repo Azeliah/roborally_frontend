@@ -37,6 +37,8 @@ export const SpaceComponent: FunctionComponent<SpaceComponentProps> = ({space, c
     }, [setCurrentPlayerOnSpace, space, switchCurrentPlayer])
     const playerColor = useMemo(() => {
         const res = board.playerDtos.find(value => value.playerId === space.playerId)
+        console.log("space.playerID " + "(" + space.x + ", " + space.y + "): " + space.playerId)
+
         if (res) return res.playerColor
     }, [board.playerDtos, space.playerId])
     return (

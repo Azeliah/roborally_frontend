@@ -46,11 +46,10 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
     }
 
     const onClickGame = async () => {
-        selectGame(game, -1)
+        //selectGame(game, -1)
         createBoard(game).then(r => {})
         setBoardCreated(true)
         game.started = true
-
     }
 
     const addUserToGame = async () => {
