@@ -11,7 +11,7 @@ export type GameComponentProps = {
 export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => {
     
     const MAX_NO_USERS = 4;
-    const {games, selectGame, editGame, createBoard, createUser, startGame} = useContext(GameContext)
+    const {selectGame, editGame, createBoard, createUser, startGame} = useContext(GameContext)
     const [editGameClicked, setEditGameClicked] = useState(false)
     const [newName,setNewName] = useState(game.name)
     const [newHeight,setNewHeight] = useState("Game height")
