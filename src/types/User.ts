@@ -1,5 +1,6 @@
 export type User = {
     playerId : number,
     playerName : string,
-    playerColor: string
+    playerColor: "red" | "green" | "yellow" | "blue",
+    gameId: number
 }

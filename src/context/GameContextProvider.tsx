@@ -47,7 +47,12 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
     const [players, setPlayers] = useState<Player[]>([])
     const playerCount = useMemo(() => players.length, [players])
     const [currentPlayerIndex, setCurrentPlayerIndex] = useState<number>(0)
-    const [currentPlayer, setCurrentPlayer] = useState<Player>({playerId : -1,playerColor:"red",boardId : -1,playerName : ""})
+    const [currentPlayer, setCurrentPlayer] = useState<Player>({
+        playerId: -1,
+        playerColor: "red",
+        boardId: -1,
+        playerName: ""
+    })
     const [spaces, setSpaces] = useState<Space[][]>([])
     const [width, setWidth] = useState<number>(0)
     const [height, setHeight] = useState<number>(0)
@@ -116,10 +121,24 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         await GameApi.createGame(name)
     }, [])
 
+    const editGame = useCallback(async (game : Game) => {
+        await GameApi.editGame(game, gameId)
+    }, [])
+
+    const createBoard = useCallback(async (game: Game) => {
+        await GameApi.createBoard(game)
+    }, [])
+
+    const createUser = useCallback(async (gameId: number) => {
+        await GameApi.createUser(gameId).catch(() => {
+            console.error("User could not be created")
+        })
+    }, [])
+
     const selectGame = useCallback(async (game: Game, playerId: number) => {
-        if (game.started){
+        if (game.started) {
             GameApi.getBoard(game.id).then(board => {
-                if (board.playerDtos.length >0){
+                if (board.playerDtos.length > 0) {
                     setSpaces(board.spaceDtos)
                     setPlayers(board.playerDtos)
                     setWidth(board.width)
@@ -129,7 +148,7 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
                     if (board.currentPlayerDto) {
                         setCurrentPlayer(board.currentPlayerDto)
                         board.playerDtos.forEach((player, index) => {
-                            if(player.playerId === board.currentPlayerDto?.playerId) {
+                            if (player.playerId === board.currentPlayerDto?.playerId) {
                                 setCurrentPlayerIndex(index)
                             }
                             if(player.playerId === playerId){
@@ -152,12 +171,15 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         setLoaded(false)
     }, [])
 
-    /*This will update the different windows to make the match within the interval stated as the last param */
-    useEffect( () => {
-        const interval = setInterval( async () =>{
-            if(loaded && gameId >= 0){
+    const updateUser = useCallback(async (user: User) => {
+        await GameApi.updateUser(user);
+    }, [])
+
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            if (loaded && gameId >= 0) {
                 GameApi.getBoard(gameId).then(board => {
-                    if (gameId === board.boardId){
+                    if (gameId === board.boardId) {
                         setSpaces(board.spaceDtos)
                         setPlayers(board.playerDtos)
                         setWidth(board.width)
@@ -167,7 +189,7 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
                         if (board.currentPlayerDto) {
                             setCurrentPlayer(board.currentPlayerDto)
                             board.playerDtos.forEach((player, index) => {
-                                if(player.playerId === board.currentPlayerDto?.playerId) {
+                                if (player.playerId === board.currentPlayerDto?.playerId) {
                                     setCurrentPlayerIndex(index)
                                 }
                             })
@@ -175,10 +197,10 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
                             console.log("Load outdated.")
                         }
                     }
-                }).catch(() =>{
+                }).catch(() => {
                     console.error("Board could not be loaded.")
                 })
-            } else{
+            } else {
                 GameApi.getGames().then(games => {
                     setGames(games)
                 }).catch(() => {
@@ -195,14 +217,18 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
             value={
                 {
                     playedPlayer: playedPlayer,
+                    updateUser: updateUser,
                     games: games,
                     selectGame: selectGame,
                     unselectedGame: unselectedGame,
                     createGame: createGame,
+                    createBoard: createBoard,
+                    createUser: createUser,
                     loaded: loaded,
                     board: board,
                     setCurrentPlayerOnSpace: setPlayerOnSpace,
-                    switchCurrentPlayer: switchToNextPlayer
+                    switchCurrentPlayer: switchToNextPlayer,
+                    editGame: editGame
                 }
             }>
             {children} {/*See: https://reactjs.org/docs/composition-vs-inheritance.html*/}
