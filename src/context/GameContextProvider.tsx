@@ -86,9 +86,9 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
 
     }, [currentPlayer, currentPlayerIndex, gameId, players, spaces])
 
-    const switchToNextPlayer = useCallback(async () => {
+    const switchToNextPlayer = useCallback(async (board : Board) => {
 
-            await GameApi.switchPlayer(gameId, currentPlayerIndex+1).then(() => {
+            await GameApi.switchPlayer(gameId, board.currentPlayerDto?.playerId).then(() => {
                 const newPlayerIndex = (currentPlayerIndex + 1) % playerCount
                 console.log("old player index", currentPlayerIndex, "new player index", newPlayerIndex)
                 setCurrentPlayer(players[newPlayerIndex])
@@ -128,6 +128,10 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
 
     const createBoard = useCallback(async (game: Game) => {
         await GameApi.createBoard(game)
+    }, [])
+
+    const startGame = useCallback(async (gameId : number) => {
+        await GameApi.startGame(gameId)
     }, [])
 
     const createUser = useCallback(async (gameId: number) => {
@@ -229,6 +233,7 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
                     createGame: createGame,
                     createBoard: createBoard,
                     createUser: createUser,
+                    startGame: startGame,
                     loaded: loaded,
                     board: board,
                     setCurrentPlayerOnSpace: setPlayerOnSpace,
