@@ -50,6 +50,7 @@ class GameApi {
     }
 
     public editGame (game: Game, gameId : number){
+        console.log("Height: " + game.height + ", Width: " + game.width)
         return axios.put(`${this.BACKEND_URL}/game/${gameId}`, game)
     }
 
