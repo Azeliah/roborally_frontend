@@ -11,8 +11,7 @@ export type GameComponentProps = {
 export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => {
     
     const MAX_NO_USERS = 4;
-    const [boardCreated, setBoardCreated] = useState(false)
-    const {games, selectGame, editGame, createBoard, createUser} = useContext(GameContext)
+    const {games, selectGame, editGame, createBoard, createUser, startGame} = useContext(GameContext)
     const [editGameClicked, setEditGameClicked] = useState(false)
     const [newName,setNewName] = useState(game.name)
     const [newHeight,setNewHeight] = useState("Game height")
@@ -46,10 +45,9 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
     }
 
     const onClickGame = async () => {
-        //selectGame(game, -1)
-        createBoard(game).then(r => {})
-        setBoardCreated(true)
         game.started = true
+        startGame(game.id)
+        createBoard(game).then(r => {})
     }
 
     const addUserToGame = async () => {
@@ -95,17 +93,19 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
                         <input type="submit" value={"Save new name"}/>
                     </form>
                     :
-                    <button onClick={onEditGame}> Edit game </button>
+                    !game.started ? <button onClick={onEditGame}> Edit game </button>
+                    :
+                    ""
                 }
             </div>
             <div>
                 <b>
-                    {game.id} : {game.name} {(!boardCreated && game.users.length < MAX_NO_USERS) ? <button onClick={addUserToGame}>Add user</button>: ""}
-                    {!boardCreated && game.users.length > 0 ? <button onClick={onClickGame}>Start Game</button> : ""}
+                    {game.id} : {game.name} {(!game.started && game.users.length < MAX_NO_USERS) ? <button onClick={addUserToGame}>Add user</button>: ""}
+                    {!game.started && game.users.length > 0 ? <button onClick={onClickGame}>Start Game</button> : ""}
                 </b>
             </div>
             <ul>
-              {boardCreated ?
+              {game.started ?
                 game.users.map( (user, index) =>
                 <li key={index}> {user.playerName} <button className={styles.buttonStyled} value={user.playerId} onClick={e => onClickPlayGame(e, user.playerId)}>Play</button>
                 </li> )
