@@ -29,8 +29,9 @@ class GameApi {
         return axios.put(`${this.BACKEND_URL}/board/${boardId}/move`, space)
     }
 
-    public switchPlayer(boardId: number) {
-        return axios.put(`${this.BACKEND_URL}/board/${boardId}/switchplayer`)
+    public switchPlayer(boardId : number, playerId: number){
+        console.log("PlayerId before sending it:" + playerId)
+        return axios.put(`${this.BACKEND_URL}/board/${boardId}/switchplayer/${playerId}`)
     }
 
     public createGame(name: String) {

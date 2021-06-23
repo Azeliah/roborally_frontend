@@ -2,17 +2,19 @@ import {FunctionComponent, useCallback, useContext, useMemo} from "react";
 import {Space} from "../types/Space";
 import GameContext from "../context/GameContext";
 import styles from "../styling/SpaceComponent.module.scss"
+import {Player} from "../types/Player";
 
 export type SpaceComponentProps = {
-    space: Space
+    space: Space,
+    currentPlayer?: Player
 }
 /*
  Note that we are explicitly specifying that SpaceComponent is of the type FunctionComponent,
  and that the props are of type SpaceComponentProps, also note that we use object destructuring to "unpack" the props.
  */
 
-export const SpaceComponent: FunctionComponent<SpaceComponentProps> = ({space}) => {
-    const {board, setCurrentPlayerOnSpace, switchCurrentPlayer,} = useContext(GameContext)
+export const SpaceComponent: FunctionComponent<SpaceComponentProps> = ({space, currentPlayer}) => {
+    const {board, setCurrentPlayerOnSpace, switchCurrentPlayer, playedPlayer} = useContext(GameContext)
     //Below we essentially define a new variable using the useMemo hook, which can only take the value "white" or "black"
     //Additionally the code inside the hook (the calculation of whether it is black or white) is only executed
     // when the space prop updates (this is known as the dependencies of the hook)
@@ -27,8 +29,10 @@ export const SpaceComponent: FunctionComponent<SpaceComponentProps> = ({space}) 
     // updated when the dependencies update.
     const onClickField = useCallback(async () => {
         if (!space.playerId) { // A shorthand, check equivalents at https://bit.ly/2MnA4Rk
-            await setCurrentPlayerOnSpace(space)
-            switchCurrentPlayer()
+            if(currentPlayer?.playerId === playedPlayer.playerId) {
+                await setCurrentPlayerOnSpace(space)
+                switchCurrentPlayer()
+            }
         }
     }, [setCurrentPlayerOnSpace, space, switchCurrentPlayer])
     const playerColor = useMemo(() => {

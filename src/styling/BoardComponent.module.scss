@@ -1,3 +1,39 @@
 .container {
     display: flex;
 }
+
+.inlineDisplay {
+    display: inline-block;
+}
+
+.playerDescriptionContainer {
+    width: 250px;
+    height:200px;
+}
+
+@mixin box($color) {
+    float: right;
+    height: 50px;
+    width: 50px;
+    margin-bottom: 15px;
+    border: 1px solid black;
+    clear: both;
+    background-color: $color;
+    display: inline-block;
+}
+
+.redBox {
+    @include box(red)
+}
+
+.greenBox {
+    @include box(green)
+}
+
+.yellowBox {
+    @include box(yellow)
+}
+
+.blueBox {
+    @include box(blue)
+}

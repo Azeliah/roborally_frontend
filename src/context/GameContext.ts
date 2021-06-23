@@ -6,7 +6,7 @@ import {User} from "../types/User";
 
 export type GameContextType = {
     games: Game[],
-    selectGame: (game: Game) => Promise<void>,
+    selectGame: (game: Game, playerId: number) => Promise<void>,
     unselectedGame: () => Promise<void>,
     createGame: (name: String) => Promise<void>,
     createBoard: (game: Game) => Promise<void>,
@@ -14,7 +14,8 @@ export type GameContextType = {
     editGame: (game: Game) => Promise<void>,
     updateUser: (user: User) => Promise<void>
 
-    loaded: boolean,
+    playedPlayer: User,
+    loaded : boolean,
     board: Board,
     setCurrentPlayerOnSpace: (space: Space) => Promise<void>,
     switchCurrentPlayer: () => Promise<void>
@@ -31,6 +32,12 @@ const GameContext = createContext<GameContextType>({
     createBoard: async () => {},
     createUser: async () => {},
     updateUser: async () => {},
+
+    playedPlayer: {
+        playerId: -1,
+        playerName: "",
+        playerColor: "green"
+    },
 
     loaded: false,
     board: {

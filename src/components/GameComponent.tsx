@@ -1,6 +1,8 @@
 import React, {FunctionComponent, useContext, useState} from 'react';
 import {Game} from "../types/Game";
 import GameContext from "../context/GameContext";
+import styles from "../styling/GamesComponent.module.scss" //Import css module
+
 import {UserComponent} from "./UserComponent";
 
 export type GameComponentProps = {
@@ -8,6 +10,12 @@ export type GameComponentProps = {
 }
 export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => {
 
+    const {selectGame, board} = useContext(GameContext)
+
+    const onClickPlayGame = async (e: React.MouseEvent<HTMLButtonElement>, playerId: number) => {
+        selectGame(game, playerId)
+    }
+    
     const MAX_NO_USERS = 4;
     const [boardCreated, setBoardCreated] = useState(false)
     const {games, selectGame, editGame, createBoard, createUser} = useContext(GameContext)
@@ -93,13 +101,20 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
                 }
             </div>
             <div>
+              </br>
                 <b>
                     {game.id} : {game.name} {(!boardCreated && game.users.length < MAX_NO_USERS) ? <button onClick={addUserToGame}>Add user</button>: ""}
                     {!boardCreated && game.users.length > 0 ? <button onClick={onClickGame}>Start Game</button> : ""}
                 </b>
             </div>
             <ul>
+              {boardCreated ?
+                {game.users.map( (user, index) =>
+                <li key={index}> {user.playerName} <button className={styles.buttonStyled} value={user.playerId} onClick={e => onClickPlayGame(e, user.playerId)}>Play</button>
+                </li> ) }
+                :
                 {game.users.map((user, index) => <UserComponent user={user} key={index}/>)}
+              }
             </ul>
         </div>
     )

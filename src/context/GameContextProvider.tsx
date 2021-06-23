@@ -15,6 +15,7 @@ type GameContextProviderPropsType = {
 const GameContextProvider = ({children}: GameContextProviderPropsType) => {
     const [games, setGames] = useState<Game[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
+    const [playingPlayer, setPlayingPlayer] = useState<User>({playerId: -1, playerName:"", playerColor:"green"})
     /*useEffect(() => {
         GameApi.getBoard(1).then(board => {
             setSpaces(board.spaceDtos)
@@ -86,11 +87,13 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
     }, [currentPlayer, currentPlayerIndex, gameId, players, spaces])
 
     const switchToNextPlayer = useCallback(async () => {
-        await GameApi.switchPlayer(gameId).then(() => {
-            const newPlayerIndex = (currentPlayerIndex + 1) % playerCount
-            setCurrentPlayer(players[newPlayerIndex])
-            setCurrentPlayerIndex(newPlayerIndex)
-        }).catch(() => console.error("Error while switching player"))
+
+            await GameApi.switchPlayer(gameId, currentPlayerIndex+1).then(() => {
+                const newPlayerIndex = (currentPlayerIndex + 1) % playerCount
+                console.log("old player index", currentPlayerIndex, "new player index", newPlayerIndex)
+                setCurrentPlayer(players[newPlayerIndex])
+                setCurrentPlayerIndex(newPlayerIndex)
+            }).catch(() => console.error("Error while switching player"))
 
     }, [currentPlayerIndex, gameId, playerCount, players])
     const board = useMemo<Board>(() => {
@@ -106,10 +109,17 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         })
     }, [currentPlayer, currentPlayerIndex, gameId, gameName, height, players, spaces, width])
 
+    const playedPlayer = useMemo<User>(() => {
+        return ({
+            playerId: playingPlayer.playerId,
+            playerName: playingPlayer.playerName,
+            playerColor: playingPlayer.playerColor
+        })
+    }, [playingPlayer.playerId, playingPlayer.playerName, playingPlayer.playerColor])
+
     const createGame = useCallback(async (name: String) => {
         await GameApi.createGame(name)
     }, [])
-
 
     const editGame = useCallback(async (game : Game) => {
         await GameApi.editGame(game, gameId)
@@ -125,7 +135,7 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         })
     }, [])
 
-    const selectGame = useCallback(async (game: Game) => {
+    const selectGame = useCallback(async (game: Game, playerId: number) => {
         if (game.started) {
             GameApi.getBoard(game.id).then(board => {
                 if (board.playerDtos.length > 0) {
@@ -140,6 +150,9 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
                         board.playerDtos.forEach((player, index) => {
                             if (player.playerId === board.currentPlayerDto?.playerId) {
                                 setCurrentPlayerIndex(index)
+                            }
+                            if(player.playerId === playerId){
+                                setPlayingPlayer(player)
                             }
                         })
                     }
@@ -203,6 +216,7 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         <GameContext.Provider
             value={
                 {
+                    playedPlayer: playedPlayer,
                     updateUser: updateUser,
                     games: games,
                     selectGame: selectGame,
