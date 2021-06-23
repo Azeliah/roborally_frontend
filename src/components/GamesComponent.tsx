@@ -50,6 +50,7 @@ const GamesComponent : FunctionComponent<GamesComponentProps> = () => {
                     )
                 }
               </div>
+            </div>
             :
             <div/>
     )

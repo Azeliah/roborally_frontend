@@ -15,7 +15,7 @@ type GameContextProviderPropsType = {
 const GameContextProvider = ({children}: GameContextProviderPropsType) => {
     const [games, setGames] = useState<Game[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
-    const [playingPlayer, setPlayingPlayer] = useState<User>({playerId: -1, playerName:"", playerColor:"green"})
+    const [playingPlayer, setPlayingPlayer] = useState<User>({playerId: -1, playerName:"", playerColor:"green", gameId: -1})
     /*useEffect(() => {
         GameApi.getBoard(1).then(board => {
             setSpaces(board.spaceDtos)
@@ -113,9 +113,10 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
         return ({
             playerId: playingPlayer.playerId,
             playerName: playingPlayer.playerName,
-            playerColor: playingPlayer.playerColor
+            playerColor: playingPlayer.playerColor,
+            gameId: playingPlayer.gameId
         })
-    }, [playingPlayer.playerId, playingPlayer.playerName, playingPlayer.playerColor])
+    }, [playingPlayer.playerId, playingPlayer.playerName, playingPlayer.playerColor, playingPlayer.gameId])
 
     const createGame = useCallback(async (name: String) => {
         await GameApi.createGame(name)
@@ -152,7 +153,11 @@ const GameContextProvider = ({children}: GameContextProviderPropsType) => {
                                 setCurrentPlayerIndex(index)
                             }
                             if(player.playerId === playerId){
-                                setPlayingPlayer(player)
+                                playedPlayer.gameId = player.boardId
+                                playedPlayer.playerName = player.playerName
+                                playedPlayer.playerId = player.playerId
+                                playedPlayer.playerColor = player.playerColor
+                                setPlayingPlayer(playedPlayer)
                             }
                         })
                     }

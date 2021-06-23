@@ -36,7 +36,8 @@ const GameContext = createContext<GameContextType>({
     playedPlayer: {
         playerId: -1,
         playerName: "",
-        playerColor: "green"
+        playerColor: "green",
+        gameId : -1
     },
 
     loaded: false,
