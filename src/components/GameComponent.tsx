@@ -73,22 +73,24 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
                     <form onSubmit={onEditClicked}>
                         <label> Edit the name of the game </label><br/>
                         <input
-                            type = "text"
+                            type="text"
                             value={newName}
-                            onChange = {onChangeName}/><br/>
+                            onChange={onChangeName}/><br/>
                         <input
-                            type = "text"
+                            type="text"
                             pattern="[0-9]*"
                             value={newWidth}
-                            onChange = {onChangeWidth}/><br/>
+                            onChange={onChangeWidth}/><br/>
                         <input
-                            type = "text"
+                            type="text"
                             pattern="[0-9]*"
                             value={newHeight}
-                            onChange = {onChangeHeight}/><br/>
+                            onChange={onChangeHeight}/><br/>
                         <input type="submit" value={"Save new name"}/>
+                    </form>
                     :
                     <button onClick={onEditGame}> Edit game </button>
+                }
             </div>
             <div>
                 <b>

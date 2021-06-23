@@ -4,9 +4,7 @@ export type Game = {
     id : number,
     name : string,
     started : boolean,
-    height : number,
-    width : number
-    users : User[]
-    width : number
+    users : User[],
+    width : number,
     height : number
 }
