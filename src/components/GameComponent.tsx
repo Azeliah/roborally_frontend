@@ -57,13 +57,16 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
 
     const onEditClicked = (event: React.FormEvent<HTMLFormElement>) =>{
         game.name = newName
-        if (checkHValid){
-            game.height = parseInt(newHeight)
-            game.width = parseInt(newWidth)
-        }
 
-        editGame(game).then(t=>{})
-        setEditGameClicked(false)
+        if (game.height > 3 && game.width > 3){
+            if (checkHValid){
+                game.height = parseInt(newHeight)
+                game.width = parseInt(newWidth)
+            }
+
+            editGame(game).then(t=>{})
+            setEditGameClicked(false)
+        }
     }
 
     const onEditGame = () => {
@@ -81,13 +84,15 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
                             value={newName}
                             onChange={onChangeName}/><br/>
                         <input
+                            title="Width needs to be 4-9"
                             type="text"
-                            pattern="[0-9]*"
+                            pattern="[4-9]*"
                             value={newWidth}
                             onChange={onChangeWidth}/><br/>
                         <input
+                            title="Height needs to be 4-9"
                             type="text"
-                            pattern="[0-9]*"
+                            pattern="[4-9]*"
                             value={newHeight}
                             onChange={onChangeHeight}/><br/>
                         <input type="submit" value={"Save new name"}/>
@@ -101,13 +106,13 @@ export const GameComponent: FunctionComponent<GameComponentProps> = ({game}) => 
             <div>
                 <b>
                     {game.id} : {game.name} {(!game.started && game.users.length < MAX_NO_USERS) ? <button onClick={addUserToGame}>Add user</button>: ""}
-                    {!game.started && game.users.length > 0 ? <button onClick={onClickGame}>Start Game</button> : ""}
+                    {!game.started && game.users.length > 0 && game.users.length > 1 ? <button onClick={onClickGame}>Start Game</button> : ""}
                 </b>
             </div>
             <ul>
               {game.started ?
                 game.users.map( (user, index) =>
-                <li key={index}> {user.playerName} <button className={styles.buttonStyled} value={user.playerId} onClick={e => onClickPlayGame(e, user.playerId)}>Play</button>
+                <li key={index}><span style={{color: user.playerColor}}>{user.playerName}</span> <button className={styles.buttonStyled} value={user.playerId} onClick={e => onClickPlayGame(e, user.playerId)}>Play</button>
                 </li> )
                 :
                 game.users.map((user, index) => <UserComponent user={user} key={index}/>)

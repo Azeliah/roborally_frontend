@@ -12,7 +12,6 @@ export const UserComponent: FunctionComponent<UserComponentProps> = ({user}) => 
     const [editMode, setEditMode] = useState(false)
     const [name, setName] = useState(user.playerName)
     const [color, setColor] = useState(user.playerColor)
-    const allColors = ["red", "green", "yellow", "blue"]
 
     const onClickEditUser = async () => {
         setEditMode(true);
