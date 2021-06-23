@@ -29,7 +29,7 @@ class GameApi {
         return axios.put(`${this.BACKEND_URL}/board/${boardId}/move`, space)
     }
 
-    public switchPlayer(boardId : number, playerId: number){
+    public switchPlayer(boardId : number, playerId: number | undefined){
         console.log("PlayerId before sending it:" + playerId)
         return axios.put(`${this.BACKEND_URL}/board/${boardId}/switchplayer/${playerId}`)
     }
@@ -55,6 +55,10 @@ class GameApi {
 
     public updateUser(user: User) {
         return axios.put(`${this.BACKEND_URL}/game/${user.gameId}/user`, user)
+    }
+
+    public startGame(gameId : number) {
+        return axios.put(`${this.BACKEND_URL}/game/started/${gameId}`)
     }
 }
 
