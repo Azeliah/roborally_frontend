@@ -31,13 +31,12 @@ export const SpaceComponent: FunctionComponent<SpaceComponentProps> = ({space, c
         if (!space.playerId) { // A shorthand, check equivalents at https://bit.ly/2MnA4Rk
             if(currentPlayer?.playerId === playedPlayer.playerId) {
                 await setCurrentPlayerOnSpace(space)
-                switchCurrentPlayer()
+                switchCurrentPlayer(board)
             }
         }
     }, [setCurrentPlayerOnSpace, space, switchCurrentPlayer])
     const playerColor = useMemo(() => {
         const res = board.playerDtos.find(value => value.playerId === space.playerId)
-        console.log("space.playerID " + "(" + space.x + ", " + space.y + "): " + space.playerId)
 
         if (res) return res.playerColor
     }, [board.playerDtos, space.playerId])
